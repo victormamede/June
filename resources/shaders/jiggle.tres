@@ -1,0 +1,30 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform sampler2D noise;
+uniform float jiggle_amount: hint_range(0.0, 10.0) = 5.0;
+uniform bool jiggle = false;
+
+void vertex() {
+	if(jiggle) {
+		VERTEX.y += (texture(noise, UV + TIME).r - 0.5) * jiggle_amount;
+	}
+}"
+
+[sub_resource type="OpenSimplexNoise" id=3]
+octaves = 1
+period = 56.4
+
+[sub_resource type="NoiseTexture" id=4]
+width = 271
+height = 42
+seamless = true
+noise = SubResource( 3 )
+
+[resource]
+shader = SubResource( 1 )
+shader_param/jiggle_amount = 5.0
+shader_param/jiggle = false
+shader_param/noise = SubResource( 4 )
